@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">TopTapper</string>
+    <string name="title_activity_splash">FullscreenActivity</string>
+    <string name="top_tapper">Top Tapper</string>
+    <string name="choose_level">בחר רמה</string>
+    <string name="newb">מתחיל</string>
+    <string name="average">מתקדם</string>
+    <string name="expert">מומחה</string>
+    <string name="play">שחק</string>
+    <string name="leaderboards">טבלת שיאים</string>
+    <string name="profile_image">תמונת פרופיל</string>
+    <string name="select_an_avatar">בחר אוואטר</string>
+    <string name="avatar">אוואטר לבחירה</string>
+    <string name="define_user">הגדרת משתמש</string>
+    <string name="name">שם</string>
+    <string name="password">סיסמה</string>
+    <string name="define">הגדר</string>
+    <string name="change_user">החלף משתמש</string>
+    <string name="enter_name">נא הכנס שם</string>
+    <string name="enter_password">נא הכנס ססמה</string>
+    <string name="user_defined">המשתמש הוגדר</string>
+    <string name="continue_">המשך</string>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="avatars">
+        <item>@drawable/avatar_1_raster</item>
+        <item>@drawable/avatar_2_raster</item>
+        <item>@drawable/avatar_3_raster</item>
+        <item>@drawable/avatar_4_raster</item>
+        <item>@drawable/avatar_5_raster</item>
+        <item>@drawable/avatar_6_raster</item>
+    </array>
+
+    <array name="colors">
+        <item>@color/pink_500</item>
+        <item>@color/blue_500</item>
+        <item>@color/green_500</item>
+        <item>@color/purple_500</item>
+    </array>
+</resources>

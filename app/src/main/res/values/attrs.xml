@@ -1,0 +1,11 @@
+<resources>
+
+    <declare-styleable name="GridImagePicker">
+        <attr name="six_images" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="ButtonsBar">
+        <attr name="buttons_bar_colors" format="reference"/>
+    </declare-styleable>
+
+</resources>
