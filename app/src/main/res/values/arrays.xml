@@ -15,5 +15,12 @@
         <item>@color/blue_500</item>
         <item>@color/green_500</item>
         <item>@color/purple_500</item>
+        <item>@color/muster_500</item>
+    </array>
+
+    <array name="three_shapes">
+        <item>@drawable/tap_shape_crushed_egg</item>
+        <item>@drawable/tap_shape_hexagon</item>
+        <item>@drawable/tap_shape_rectangle</item>
     </array>
 </resources>

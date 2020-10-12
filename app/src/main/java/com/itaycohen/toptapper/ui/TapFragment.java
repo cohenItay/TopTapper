@@ -30,7 +30,7 @@ public class TapFragment extends Fragment {
                 mCountingView.setVisibility(View.GONE);
 
         });
-        mBtnsBar.setListener((btn, position, color) -> {
+        mBtnsBar.setListener((btn, position, shapeRes, colorRes) -> {
 
         });
     }

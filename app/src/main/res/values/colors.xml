@@ -14,6 +14,9 @@
 
     <color name="blue_500">#2196f3</color>
     <color name="pink_500">#e91e63</color>
+    <color name="muster_500">#FFE082</color>
+
+    <color name="yellow_500_a30">#4DFFF59D</color>
 
     <!--Color surface (light), color on error (light), -->
     <!--color on surface (dark), color on surface (dark)-->
@@ -23,5 +26,6 @@
     <!--Color on secondary (light), color on background (light),-->
     <!--color on surface (light)-->
     <color name="black_900">#000000</color>
+    <color name="gray500">#7C7C7C</color>
 
 </resources>

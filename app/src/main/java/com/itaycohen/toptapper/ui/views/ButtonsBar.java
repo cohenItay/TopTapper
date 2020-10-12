@@ -1,6 +1,7 @@
 package com.itaycohen.toptapper.ui.views;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
@@ -11,13 +12,16 @@ import android.widget.LinearLayout;
 
 import com.itaycohen.toptapper.R;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 public class ButtonsBar extends LinearLayout {
 
     private int[] colorsArr;
-    private ImageButton[] buttonsArr = new ImageButton[4];
+    private int[] shapesArr;
     private Listener mListener;
 
     public ButtonsBar(Context context) {
@@ -47,21 +51,36 @@ public class ButtonsBar extends LinearLayout {
         this.mListener = mListener;
     }
 
+    public void setShapesArr(int[] shapesArr) {
+        setShapesArr(shapesArr, null);
+    }
+
+    public void setShapesArr(int[] shapesArr, int[] colorsArr) {
+        this.shapesArr = shapesArr;
+        if (colorsArr == null || colorsArr.length == shapesArr.length)
+            this.colorsArr = colorsArr;
+        updateBar();
+    }
+
     private void extractAttrs(@Nullable AttributeSet attrs) {
         if (attrs == null)
             return;
 
         TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.ButtonsBar);
-        int arrayResourceId = typedArray.getResourceId(R.styleable.ButtonsBar_buttons_bar_colors, 0);
-        if (arrayResourceId != 0) {
-            final TypedArray resourceArray = getResources().obtainTypedArray(arrayResourceId);
-            if (resourceArray.length() > 0) {
-                colorsArr = new int[resourceArray.length()];
-                for (int i = 0; i < resourceArray.length(); i++) {
-                    final int resourceId = resourceArray.getResourceId(i, 0);
-                    colorsArr[i] = resourceId;
+        int arrayShapeResourceId = typedArray.getResourceId(R.styleable.ButtonsBar_buttons_bar_shapes, 0);
+        int arrayColorsResourceId = typedArray.getResourceId(R.styleable.ButtonsBar_buttons_bar_colors, 0);
+        if (arrayShapeResourceId != 0) {
+            final TypedArray resourceShapesArray = getResources().obtainTypedArray(arrayShapeResourceId);
+            final TypedArray resourceColorsArray = getResources().obtainTypedArray(arrayColorsResourceId);
+            if (resourceShapesArray.length() > 0) {
+                shapesArr = new int[resourceShapesArray.length()];
+                colorsArr = new int[resourceShapesArray.length()];
+                for (int i = 0; i < resourceShapesArray.length(); i++) {
+                    shapesArr[i] = resourceShapesArray.getResourceId(i, 0);
+                    colorsArr[i] = resourceColorsArray.getResourceId(i, 0);
                 }
-                resourceArray.recycle();
+                resourceShapesArray.recycle();
+                resourceColorsArray.recycle();
             }
         }
         typedArray.recycle();
@@ -69,20 +88,27 @@ public class ButtonsBar extends LinearLayout {
 
     private void initView() {
         setOrientation(LinearLayout.HORIZONTAL);
-        for (int i=0; i<colorsArr.length; i++) {
+        updateBar();
+    }
+
+    private void updateBar() {
+        removeAllViews();
+        for (int i=0; i<shapesArr.length; i++) {
             ImageButton button = new ImageButton(getContext());
             button.setId(View.generateViewId());
             LayoutParams params = new LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1f);
             params.setMarginEnd((int)getResources().getDimension(R.dimen.button_bar_margin));
             button.setLayoutParams(params);
-            button.setBackgroundResource(colorsArr[i]);
+            button.setImageResource(shapesArr[i]);
+            button.setImageTintList(ResourcesCompat.getColorStateList(getResources(), colorsArr[i], getContext().getTheme()));
+            button.setBackgroundResource(android.R.color.transparent);
             int finalI = i;
-            button.setOnClickListener(v -> mListener.onButtonClick((Button)v, finalI, colorsArr[finalI]));
+            button.setOnClickListener(v -> mListener.onButtonClick((ImageButton)v, finalI, shapesArr[finalI], colorsArr[finalI]));
             addView(button);
         }
     }
 
     public interface Listener {
-        void onButtonClick(Button btn, int position, @IdRes int color);
+        void onButtonClick(ImageButton btn, int position, @DrawableRes int shapeRes, @ColorRes int colorRes);
     }
 }
