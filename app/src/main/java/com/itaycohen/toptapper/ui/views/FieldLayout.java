@@ -1,11 +1,12 @@
 package com.itaycohen.toptapper.ui.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.media.Image;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -75,16 +74,23 @@ public class FieldLayout extends GridLayout {
             ImageView iv = imageViewsMatrix[r][c];
             iv.setImageResource(shapeRes);
             iv.setTag(shapeRes);
-            iv.invalidate();
         }
     }
 
     public void setListener(Listener mListener) {
         this.mListener = mListener;
-        setOnClickListener(v -> {
-            // disqualify user when press on bg
-            if (mListener != null)
-                mListener.onShapeClick(-1);
+        setOnTouchListener((v, event) -> {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN: {
+                    // disqualify user when press on bg
+                    if (mListener != null)
+                        mListener.onShapeDownTouch(-1);
+                    return true;
+                }
+                case MotionEvent.ACTION_UP:
+                    v.performClick();
+            }
+            return false;
         });
     }
 
@@ -156,19 +162,31 @@ public class FieldLayout extends GridLayout {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private ImageView createImageView(Pair<Integer, Integer> gridLocation) {
         ImageView imageView = new ImageView(getContext());
-        Spec columnSpec = GridLayout.spec(gridLocation.first, 1, 1f);
-        Spec rowSpec = GridLayout.spec(gridLocation.second, 1, 1f);
-        LayoutParams params = new LayoutParams(columnSpec, rowSpec);
+        Spec columnSpec = GridLayout.spec(gridLocation.first, 1);
+        Spec rowSpec = GridLayout.spec(gridLocation.second, 1);
+        LayoutParams params = new LayoutParams(rowSpec, columnSpec);
         params.setGravity(Gravity.CENTER);
         imageView.setLayoutParams(params);
-        imageView.setOnClickListener(v -> {
-            if (mListener != null) {
-                Object tag = imageView.getTag();
-                int shapeRes = tag != null ? (int) tag : -1;
-                mListener.onShapeClick(shapeRes);
+        imageView.setOnTouchListener((v, event) -> {
+            switch (event.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN: {
+                    // disqualify user when press on bg
+                    if (mListener != null) {
+                        Object tag = imageView.getTag();
+                        int shapeRes = tag != null ? (int) tag : -1;
+                        mListener.onShapeDownTouch(shapeRes);
+                    }
+                    return true;
+                }
+                case MotionEvent.ACTION_UP: {
+                    v.performClick();
+                    return true;
+                }
             }
+            return false;
         });
         return imageView;
     }
@@ -178,7 +196,6 @@ public class FieldLayout extends GridLayout {
             ImageView child = (ImageView)getChildAt(i);
             child.setImageResource(0);
             child.setTag(null);
-            child.invalidate();
         }
     }
 
@@ -196,6 +213,6 @@ public class FieldLayout extends GridLayout {
     }
 
     public interface Listener {
-        void onShapeClick(@DrawableRes int shapeRes);
+        void onShapeDownTouch(@DrawableRes int shapeRes);
     }
 }

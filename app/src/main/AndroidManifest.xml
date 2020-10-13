@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.itaycohen.toptapper">
 
+    <uses-feature android:name="android.hardware.touchscreen.multitouch"/>
+
     <application
         android:name=".App"
         android:allowBackup="true"

@@ -42,12 +42,13 @@ public class TapFragment extends Fragment {
                 return;
 
             ((ViewGroup)getView()).removeView(mCountingView);
-            timer.scheduleAtFixedRate(timerTask, 0L, 2000L);
+            timer.scheduleAtFixedRate(timerTask, 0L, 800L);
         });
         mFieldLayout.setMaxItemsPerCycle(5);
         mFieldLayout.setListener(shapeRes -> {
             Log.d("tagg", "shapeRes: "+ shapeRes);
         });
+        getView().setOnClickListener(v -> timer.cancel());
     }
 
     private TimerTask timerTask = new TimerTask() {
