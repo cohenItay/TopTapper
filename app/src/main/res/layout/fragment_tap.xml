@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tapet">
 
-    <com.itaycohen.toptapper.ui.views.CountingView
-        android:id="@+id/countingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="gone" />
-
     <com.itaycohen.toptapper.ui.views.ButtonsBar
         android:id="@+id/btnsBar"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="106dp"
         android:layout_marginBottom="20dp"
         android:padding="5dp"
         android:layout_marginEnd="5dp"
@@ -39,12 +34,17 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
 
-    <View
+    <com.itaycohen.toptapper.ui.views.FieldLayout
+        android:id="@+id/fieldLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:alpha="0.75"
         android:background="@drawable/tap_background"
-        android:scaleX="1.1"
+        android:padding="3dp"
+        android:useDefaultMargins="true"
+        app:shapes_pool_arr="@array/total_shapes"
+        app:item_layout_height="96dp"
+        app:item_layout_width="96dp"
         app:layout_constraintBottom_toTopOf="@id/middleGuide"
         app:layout_constraintTop_toBottomOf="@id/topGuide" />
 
@@ -60,4 +60,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <com.itaycohen.toptapper.ui.views.CountingView
+        android:id="@+id/countingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

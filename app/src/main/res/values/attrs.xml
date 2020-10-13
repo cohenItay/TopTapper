@@ -9,7 +9,7 @@
         <attr name="buttons_bar_shapes" format="reference"/>
     </declare-styleable>
 
-    <declare-styleable name="FieldView">
+    <declare-styleable name="FieldLayout">
         <attr name="item_layout_width" format="dimension"/>
         <attr name="item_layout_height" format="dimension"/>
         <attr name="shapes_pool_arr" format="reference"/>

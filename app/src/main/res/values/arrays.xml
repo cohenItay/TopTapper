@@ -23,4 +23,12 @@
         <item>@drawable/tap_shape_hexagon</item>
         <item>@drawable/tap_shape_rectangle</item>
     </array>
+
+    <array name="total_shapes">
+        <item>@drawable/tap_shape_crushed_egg</item>
+        <item>@drawable/tap_shape_oval</item>
+        <item>@drawable/tap_shape_hexagon</item>
+        <item>@drawable/tap_shape_rectangle</item>
+        <item>@drawable/tap_shape_triangle</item>
+    </array>
 </resources>

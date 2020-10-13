@@ -1,20 +1,15 @@
 package com.itaycohen.toptapper.ui.views;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.itaycohen.toptapper.R;
 
-import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
-import androidx.annotation.IdRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -22,7 +17,6 @@ public class ButtonsBar extends LinearLayout {
 
     private int[] colorsArr;
     private int[] shapesArr;
-    private Listener mListener;
 
     public ButtonsBar(Context context) {
         super(context);
@@ -45,10 +39,6 @@ public class ButtonsBar extends LinearLayout {
         super(context, attrs, defStyleAttr, defStyleRes);
         extractAttrs(attrs);
         initView();
-    }
-
-    public void setListener(Listener mListener) {
-        this.mListener = mListener;
     }
 
     public void setShapesArr(int[] shapesArr) {
@@ -103,12 +93,7 @@ public class ButtonsBar extends LinearLayout {
             button.setImageTintList(ResourcesCompat.getColorStateList(getResources(), colorsArr[i], getContext().getTheme()));
             button.setBackgroundResource(android.R.color.transparent);
             int finalI = i;
-            button.setOnClickListener(v -> mListener.onButtonClick((ImageButton)v, finalI, shapesArr[finalI], colorsArr[finalI]));
             addView(button);
         }
-    }
-
-    public interface Listener {
-        void onButtonClick(ImageButton btn, int position, @DrawableRes int shapeRes, @ColorRes int colorRes);
     }
 }
