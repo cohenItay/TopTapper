@@ -42,6 +42,8 @@
         android:background="@drawable/tap_background"
         android:padding="3dp"
         android:useDefaultMargins="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         app:shapes_pool_arr="@array/total_shapes"
         app:item_layout_height="96dp"
         app:item_layout_width="96dp"
