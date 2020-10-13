@@ -48,7 +48,6 @@ public class TapFragment extends Fragment {
         mFieldLayout.setListener(shapeRes -> {
             Log.d("tagg", "shapeRes: "+ shapeRes);
         });
-        getView().setOnClickListener(v -> timer.cancel());
     }
 
     private TimerTask timerTask = new TimerTask() {
