@@ -91,12 +91,12 @@ public class TapFragment extends Fragment {
                 maxFieldItemsPerCycle = 4;
                 break;
             case INTERMIDATE:
-                period = 1300L;
+                period = 1200L;
                 plateAmount = 4;
                 maxFieldItemsPerCycle = 5;
                 break;
             case EXPERT:
-                period = 1200L;
+                period = 1000L;
                 plateAmount = 4;
                 maxFieldItemsPerCycle = 6;
                 colorsPool = Utils.getListOfResourcesFor(getResources(), R.array.distinct_colors);
