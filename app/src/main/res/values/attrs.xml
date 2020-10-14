@@ -4,7 +4,7 @@
         <attr name="six_images" format="reference"/>
     </declare-styleable>
 
-    <declare-styleable name="ButtonsBar">
+    <declare-styleable name="PlateView">
         <attr name="buttons_bar_colors" format="reference"/>
         <attr name="buttons_bar_shapes" format="reference"/>
     </declare-styleable>

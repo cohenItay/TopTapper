@@ -1,4 +1,4 @@
-package com.itaycohen.toptapper.ui;
+package com.itaycohen.toptapper.ui.utils;
 
 import android.content.res.Resources;
 import android.content.res.TypedArray;

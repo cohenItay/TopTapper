@@ -2,26 +2,29 @@ package com.itaycohen.toptapper.ui.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
+import android.graphics.ColorFilter;
 import android.util.AttributeSet;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.itaycohen.toptapper.R;
-import com.itaycohen.toptapper.ui.Utils;
+import com.itaycohen.toptapper.ui.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 
 public class FieldLayout extends GridLayout {
 
@@ -32,6 +35,9 @@ public class FieldLayout extends GridLayout {
     private int mMaxItemsPerCycle;
     private ImageView[][] imageViewsMatrix;
     private Listener mListener;
+    private boolean mRespondToTouch = true;
+    @ColorRes
+    private List<Integer> colorsPool = Arrays.asList(R.color.black_900);
 
 
     public FieldLayout(@NonNull Context context) {
@@ -53,7 +59,9 @@ public class FieldLayout extends GridLayout {
         extractAttrs(attrs);
     }
 
-
+    public void setRespondToTouch(boolean mResponsToTouch) {
+        this.mRespondToTouch = mResponsToTouch;
+    }
 
     public void setMaxItemsPerCycle(int mItemsPerCycle) {
         if (mItemsPerCycle > mShapesResArr.length)
@@ -62,11 +70,15 @@ public class FieldLayout extends GridLayout {
         this.mMaxItemsPerCycle = mItemsPerCycle;
     }
 
+    public void setColorsPool(@ColorRes List<Integer> colorsPool) {
+        this.colorsPool = (colorsPool != null && colorsPool.size() > 0) ? colorsPool : Arrays.asList(R.color.black_900);
+    }
+
     public void refreshImages() {
         if (!isParamsValid())
             return;
 
-        cleanImages();
+        cleanField();
         Random random = new Random(); // 0 -> mMaxItemsPerCycle-1
         int shapesAmount = random.nextInt(mMaxItemsPerCycle)+1;
         for (int shapeRes : getRandomShapesResArr(shapesAmount)) {
@@ -74,7 +86,16 @@ public class FieldLayout extends GridLayout {
             int c = random.nextInt(getRowCount());
             ImageView iv = imageViewsMatrix[r][c];
             iv.setImageResource(shapeRes);
+            int randomColorRes = colorsPool.get(random.nextInt(colorsPool.size()));
+            int resolvedColor = ResourcesCompat.getColor(getResources(), randomColorRes, getContext().getTheme());
+            iv.setColorFilter(resolvedColor);
             iv.setTag(shapeRes);
+        }
+    }
+
+    public void cleanField() {
+        for(int i=0; i<getChildCount(); i++) {
+            cleanImage((ImageView)getChildAt(i));
         }
     }
 
@@ -84,7 +105,7 @@ public class FieldLayout extends GridLayout {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN: {
                     // disqualify user when press on bg
-                    if (mListener != null)
+                    if (mListener != null && mRespondToTouch)
                         mListener.onShapeDownTouch(-1);
                     return true;
                 }
@@ -175,10 +196,11 @@ public class FieldLayout extends GridLayout {
             switch (event.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN: {
                     // disqualify user when press on bg
-                    if (mListener != null) {
+                    if (mListener != null && mRespondToTouch) {
                         Object tag = imageView.getTag();
                         int shapeRes = tag != null ? (int) tag : -1;
                         mListener.onShapeDownTouch(shapeRes);
+                        cleanImage(imageView);
                     }
                     return true;
                 }
@@ -192,22 +214,21 @@ public class FieldLayout extends GridLayout {
         return imageView;
     }
 
-    private void cleanImages() {
-        for(int i=0; i<getChildCount(); i++) {
-            ImageView child = (ImageView)getChildAt(i);
-            child.setImageResource(0);
-            child.setTag(null);
-        }
+    private void cleanImage(ImageView child) {
+        child.setImageResource(0);
+        child.setTag(null);
     }
 
     private int[] getRandomShapesResArr(int forAmount) {
         List<Integer> shapesResList = new ArrayList<>(mShapesResArr.length);
         for (int shapeRes : mShapesResArr)
             shapesResList.add(shapeRes);
-        List<Integer> randomList = Utils.getRandomItemsFromCollection(forAmount, shapesResList);
+
+        List<Integer> randomShapesList = Utils.getRandomItemsFromCollection(forAmount, shapesResList);
+
         int[] randomShapes = new int[forAmount];
         for (int i=0; i<forAmount; i++)
-            randomShapes[i] = shapesResList.get(i);
+            randomShapes[i] = randomShapesList.get(i);
         return randomShapes;
     }
 

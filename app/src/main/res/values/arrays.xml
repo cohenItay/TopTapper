@@ -10,12 +10,15 @@
         <item>@drawable/avatar_6_raster</item>
     </array>
 
-    <array name="colors">
+    <array name="distinct_colors">
         <item>@color/pink_500</item>
         <item>@color/blue_500</item>
         <item>@color/green_500</item>
         <item>@color/purple_500</item>
         <item>@color/muster_500</item>
+        <item>@color/light_green_500</item>
+        <item>@color/cyan_500</item>
+        <item>@color/orange_500</item>
     </array>
 
     <array name="total_shapes">

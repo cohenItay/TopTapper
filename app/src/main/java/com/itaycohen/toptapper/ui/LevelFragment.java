@@ -21,19 +21,17 @@ public class LevelFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.newbBtn).setOnClickListener(v -> {
-            proceed(Level.BASIC);
+           proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.BASIC));
         });
         view.findViewById(R.id.avgBtn).setOnClickListener(v -> {
-            proceed(Level.INTERMIDATE);
+           proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.INTERMIDATE));
         });
         view.findViewById(R.id.expertBtn).setOnClickListener(v -> {
-            proceed(Level.EXPERT);
+           proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.EXPERT));
         });
     }
 
-    private void proceed(Level level) {
-        Bundle b = new Bundle();
-        b.putSerializable(TapFragment.KEY_LEVEL, level);
-        Navigation.findNavController(getView()).navigate(R.id.action_levelFragment_to_tapFragment);
+    private void proceed(LevelFragmentDirections.ActionLevelFragmentToTapFragment action) {
+        Navigation.findNavController(getView()).navigate(action);
     }
 }

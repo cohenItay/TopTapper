@@ -3,20 +3,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/tapet">
 
-    <com.itaycohen.toptapper.ui.views.ButtonsBar
+    <TextView
+        android:id="@+id/colorsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/colors"
+        android:visibility="invisible"
+        tools:visibility="visible"
+        android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/btnsBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.82" />
+
+    <com.itaycohen.toptapper.ui.views.PlateView
         android:id="@+id/btnsBar"
         android:layout_width="match_parent"
         android:layout_height="106dp"
-        android:layout_marginBottom="20dp"
-        android:padding="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/tap_shapes_plate_background"
-        app:buttons_bar_colors="@array/colors"
+        android:padding="5dp"
+        app:buttons_bar_colors="@array/distinct_colors"
         app:layout_constraintBottom_toTopOf="@id/topGuide" />
 
     <androidx.constraintlayout.widget.Guideline
@@ -37,31 +53,31 @@
         android:id="@+id/fieldLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:splitMotionEvents="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:alpha="0.75"
         android:background="@drawable/tap_background"
         android:padding="6dp"
+        android:splitMotionEvents="true"
         android:useDefaultMargins="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:shapes_pool_arr="@array/total_shapes"
         app:item_layout_height="96dp"
         app:item_layout_width="96dp"
         app:layout_constraintBottom_toTopOf="@id/middleGuide"
-        app:layout_constraintTop_toBottomOf="@id/topGuide" />
+        app:layout_constraintTop_toBottomOf="@id/topGuide"
+        app:shapes_pool_arr="@array/total_shapes" />
 
     <ProgressBar
         android:id="@+id/timeProgress"
         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:progressDrawable="@drawable/tap_progress_drawable"
-        tools:progress="50"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/tap_progress_drawable"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/middleGuide"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGuide"
+        tools:progress="50" />
 
     <com.itaycohen.toptapper.ui.views.CountingView
         android:id="@+id/countingView"

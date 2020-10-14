@@ -57,6 +57,7 @@ public class CountingView extends RelativeLayout {
     }
 
     public void startCount(Long delay) {
+        threeNum.setVisibility(View.VISIBLE);
         Runnable runnable = () -> {
             runHideThreeAnim();
             runShowHideTwoAnim();
@@ -87,7 +88,13 @@ public class CountingView extends RelativeLayout {
                         if (threeNum == null)
                             return;
 
-                        threeNum.setVisibility(View.GONE);
+                        threeNum.setVisibility(View.INVISIBLE);
+                        threeNum.setAlpha(1f);
+                        threeNum.setScaleX(1f);
+                        threeNum.setScaleY(1f);
+                        threeNum.setTranslationX(0f);
+                        threeNum.setTranslationY(0f);
+
                     }
                 });
     }
@@ -98,6 +105,9 @@ public class CountingView extends RelativeLayout {
 
         float twoNumToX = xCenter - (twoNum.getWidth()/2f);
         float twoNumToY = yCenter - (twoNum.getHeight()/2f);
+
+        float initialX = twoNum.getX();
+        float initialY = twoNum.getY();
 
         twoNum.animate()
                 .scaleX(0.5f)
@@ -128,7 +138,12 @@ public class CountingView extends RelativeLayout {
                                             public void onAnimationEnd(Animator animation) {
                                                 if (twoNum == null)
                                                     return;
-                                                twoNum.setVisibility(View.GONE);
+
+                                                twoNum.setAlpha(0f);
+                                                twoNum.setScaleX(1f);
+                                                twoNum.setScaleY(1f);
+                                                twoNum.setX(initialX);
+                                                twoNum.setY(initialY);
                                             }
                                         });
                             }
@@ -147,6 +162,10 @@ public class CountingView extends RelativeLayout {
         final float oneNumToX = xCenter - (oneNum.getWidth()/2f);
         final float oneNumFromY = oneNum.getY();
         final float oneNumToY = yCenter - (oneNum.getHeight()/2f);
+
+        float initialX = oneNum.getX();
+        float initialY = oneNum.getY();
+
         oneNum.animate()
                 .scaleX(0.5f)
                 .scaleY(0.5f)
@@ -177,7 +196,11 @@ public class CountingView extends RelativeLayout {
                                             public void onAnimationEnd(Animator animation) {
                                                 if (oneNum==null)
                                                     return;
-                                                oneNum.setVisibility(View.GONE);
+                                                oneNum.setAlpha(0f);
+                                                oneNum.setScaleX(1f);
+                                                oneNum.setScaleY(1f);
+                                                oneNum.setX(initialX);
+                                                oneNum.setY(initialY);
                                             }
                                         });
                             }
@@ -194,6 +217,10 @@ public class CountingView extends RelativeLayout {
 
         float goTextToX = xCenter - (goText.getWidth()/2f);
         float goTextToY = yCenter - (goText.getHeight()/2f);
+
+        float initialX = goText.getX();
+        float initialY = goText.getY();
+
         goText.animate()
                 .scaleX(1f)
                 .scaleY(1f)
@@ -213,6 +240,13 @@ public class CountingView extends RelativeLayout {
                                 .setListener(new EmptyAnimatorListener() {
                                     @Override
                                     public void onAnimationEnd(Animator animation) {
+                                        if (goText != null) {
+                                            goText.setAlpha(0f);
+                                            goText.setScaleX(2f);
+                                            goText.setScaleY(2f);
+                                            goText.setX(initialX);
+                                            goText.setY(initialY);
+                                        }
                                         if (mListener != null)
                                             mListener.onCountingDone();
                                     }
@@ -227,6 +261,8 @@ public class CountingView extends RelativeLayout {
         twoNum = (TextView)findViewById(R.id.twoNum);
         threeNum = (TextView)findViewById(R.id.threeNum);
         goText = (TextView)findViewById(R.id.goText);
+
+
 
         getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
