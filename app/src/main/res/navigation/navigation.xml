@@ -21,7 +21,12 @@
         android:id="@+id/tapFragment"
         android:name="com.itaycohen.toptapper.ui.TapFragment"
         android:label="TapFragment"
-        tools:layout="@layout/fragment_tap"/>
+        tools:layout="@layout/fragment_tap">
+        <argument
+            android:name="level"
+            app:argType="com.itaycohen.toptapper.ui.models.Level"
+            android:defaultValue="BASIC" />
+    </fragment>
     <fragment
         android:id="@+id/entranceFragment"
         android:name="com.itaycohen.toptapper.ui.EntranceFragment"

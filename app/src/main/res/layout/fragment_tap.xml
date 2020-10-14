@@ -17,7 +17,6 @@
         android:layout_marginStart="5dp"
         android:background="@drawable/tap_shapes_plate_background"
         app:buttons_bar_colors="@array/colors"
-        app:buttons_bar_shapes="@array/three_shapes"
         app:layout_constraintBottom_toTopOf="@id/topGuide" />
 
     <androidx.constraintlayout.widget.Guideline

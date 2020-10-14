@@ -18,17 +18,16 @@
         <item>@color/muster_500</item>
     </array>
 
-    <array name="three_shapes">
-        <item>@drawable/tap_shape_crushed_egg</item>
-        <item>@drawable/tap_shape_hexagon</item>
-        <item>@drawable/tap_shape_rectangle</item>
-    </array>
-
     <array name="total_shapes">
         <item>@drawable/tap_shape_crushed_egg</item>
         <item>@drawable/tap_shape_oval</item>
         <item>@drawable/tap_shape_hexagon</item>
         <item>@drawable/tap_shape_rectangle</item>
         <item>@drawable/tap_shape_triangle</item>
+        <item>@drawable/tap_shape_heart</item>
+        <item>@drawable/tap_shape_female_black_hair</item>
+        <item>@drawable/tap_shapre_heart_key</item>
+        <item>@drawable/tap_shpae_lightning_bolt</item>
+        <item>@drawable/tap_shape_star_in_a_circle</item>
     </array>
 </resources>

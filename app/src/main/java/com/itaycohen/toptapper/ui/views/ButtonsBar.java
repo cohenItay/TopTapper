@@ -9,7 +9,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.itaycohen.toptapper.R;
+import com.itaycohen.toptapper.ui.Utils;
 
+import java.util.List;
+
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -41,11 +46,20 @@ public class ButtonsBar extends LinearLayout {
         initView();
     }
 
-    public void setShapesArr(int[] shapesArr) {
+
+
+    public void setShapesArr(@DrawableRes List<Integer> shapesArr) {
+        setShapesArr(Utils.listToArray(shapesArr));
+    }
+
+    public void setShapesArr(@DrawableRes int[] shapesArr) {
         setShapesArr(shapesArr, null);
     }
 
-    public void setShapesArr(int[] shapesArr, int[] colorsArr) {
+    public void setShapesArr(@DrawableRes List<Integer> shapesArr, @ColorRes List<Integer> colorsArr) {
+        setShapesArr(Utils.listToArray(shapesArr), Utils.listToArray(colorsArr));
+    }
+    public void setShapesArr(@DrawableRes int[] shapesArr, @ColorRes int[] colorsArr) {
         this.shapesArr = shapesArr;
         if (colorsArr == null || colorsArr.length == shapesArr.length)
             this.colorsArr = colorsArr;

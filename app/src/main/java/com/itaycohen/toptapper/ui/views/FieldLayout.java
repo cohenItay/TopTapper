@@ -12,6 +12,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 
 import com.itaycohen.toptapper.R;
+import com.itaycohen.toptapper.ui.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -203,12 +204,10 @@ public class FieldLayout extends GridLayout {
         List<Integer> shapesResList = new ArrayList<>(mShapesResArr.length);
         for (int shapeRes : mShapesResArr)
             shapesResList.add(shapeRes);
-        Collections.shuffle(shapesResList);
-
+        List<Integer> randomList = Utils.getRandomItemsFromCollection(forAmount, shapesResList);
         int[] randomShapes = new int[forAmount];
         for (int i=0; i<forAmount; i++)
             randomShapes[i] = shapesResList.get(i);
-
         return randomShapes;
     }
 
