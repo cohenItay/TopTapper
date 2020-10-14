@@ -1,7 +1,5 @@
 package com.itaycohen.toptapper.ui;
 
-import android.content.res.ColorStateList;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +17,7 @@ import com.itaycohen.toptapper.ui.views.PlateView;
 import com.itaycohen.toptapper.ui.views.CountingView;
 import com.itaycohen.toptapper.ui.views.FieldLayout;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -36,19 +35,22 @@ import androidx.navigation.Navigation;
 public class TapFragment extends Fragment {
 
     private CountingView mCountingView;
-    private PlateView mBtnsBar;
+    private PlateView mPlateView;
     private FieldLayout mFieldLayout;
     private ConstraintLayout mRootLayout;
     private TextView mColorsTextView;
+    private View mBlackMask;
     private Timer timer = new Timer();
     private Handler handler = new Handler(Looper.getMainLooper());
     private @DrawableRes List<Integer> mTotalShapesList;
-    private @DrawableRes List<Integer> mPlateShapes;
+    private @DrawableRes List<Integer> mPlateShapesRes;
+    private @ColorRes List<Integer> mPlateColorsRes;
     private CountingViewListenerImpl mCountingViewListener = new CountingViewListenerImpl();
     private int clickCount = 0;
     private long period = 0;
     private Level level;
     private @ColorRes List<Integer> colorsPool;
+    private boolean isCurrentStateColor = false;
 
 
     public TapFragment() {
@@ -60,10 +62,11 @@ public class TapFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mCountingView = view.findViewById(R.id.countingView);
-        mBtnsBar = view.findViewById(R.id.btnsBar);
+        mPlateView = view.findViewById(R.id.btnsBar);
         mFieldLayout = view.findViewById(R.id.fieldLayout);
         mRootLayout = view.findViewById(R.id.rootLayout);
         mColorsTextView = view.findViewById(R.id.colorsTextView);
+        mBlackMask = view.findViewById(R.id.blackMask);
         setup();
         mCountingView.setListener(mCountingViewListener);
     }
@@ -105,10 +108,10 @@ public class TapFragment extends Fragment {
         }
 
         mFieldLayout.setMaxItemsPerCycle(maxFieldItemsPerCycle);
-        mPlateShapes = Utils.getRandomItemsFromCollection(plateAmount, mTotalShapesList);
-        List<Integer> colorsRes = Utils.getListOfResourcesFor(getResources(), R.array.distinct_colors);
-        colorsRes = Utils.getRandomItemsFromCollection(plateAmount, colorsRes);
-        mBtnsBar.setShapesArr(mPlateShapes, colorsRes);
+        mPlateShapesRes = Utils.getRandomItemsFromCollection(plateAmount, mTotalShapesList);
+        mPlateColorsRes = Utils.getListOfResourcesFor(getResources(), R.array.distinct_colors);
+        mPlateColorsRes = Utils.getRandomItemsFromCollection(plateAmount, mPlateColorsRes);
+        mPlateView.setShapesArr(mPlateShapesRes, mPlateColorsRes);
     }
 
     private  class CountingViewListenerImpl implements CountingView.Listener {
@@ -129,7 +132,6 @@ public class TapFragment extends Fragment {
 
     private class RefreshImagesTimerTask extends TimerTask {
 
-        private boolean isCurrentStateColor = false;
         private int periodsForColorChange = 15;
         private int periodIndex = 1;
 
@@ -139,7 +141,7 @@ public class TapFragment extends Fragment {
                 if (level == Level.EXPERT) {
                     if (periodIndex % periodsForColorChange == 0) {
                         isCurrentStateColor = !isCurrentStateColor;
-                        setColorsMode(isCurrentStateColor);
+                        onColorsModeChange(isCurrentStateColor);
                         periodIndex = 1;
                     }
                     periodIndex++;
@@ -149,17 +151,15 @@ public class TapFragment extends Fragment {
         }
     }
 
-    private void setColorsMode(boolean isColorMode) {
-        int resolvedColor = ResourcesCompat.getColor(getResources(), R.color.black_800_a35, requireContext().getTheme());
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            mRootLayout.setForegroundTintList(isColorMode ? ColorStateList.valueOf(resolvedColor) : null);
-        }
+    private void onColorsModeChange(boolean isColorMode) {
+        mBlackMask.setVisibility(isColorMode ? View.VISIBLE : View.INVISIBLE);
         mColorsTextView.setVisibility(isColorMode ? View.VISIBLE : View.INVISIBLE);
         mFieldLayout.setColorsPool(isColorMode ? colorsPool : null);
     }
 
-    private FieldLayout.Listener onFieldClick = shapeRes -> {
-        if (!mPlateShapes.contains(shapeRes)) {
+    private FieldLayout.Listener onFieldClick = (shapeRes, colorRes) -> {
+        Collection<Integer> checkCollection = isCurrentStateColor ? mPlateColorsRes: mPlateShapesRes;
+        if (!checkCollection.contains(isCurrentStateColor ? colorRes : shapeRes)) {
             timer.cancel();
             mFieldLayout.setRespondToTouch(false);
             showEndSessionDialog();
@@ -179,6 +179,8 @@ public class TapFragment extends Fragment {
                     timer = new Timer();
                     mCountingView.setVisibility(View.VISIBLE);
                     mFieldLayout.cleanField();
+                    isCurrentStateColor = false;
+                    onColorsModeChange(false);
                     setup();
                     mCountingView.startCount(1000L);
                     dialog.dismiss();

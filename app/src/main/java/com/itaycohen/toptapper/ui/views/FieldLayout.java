@@ -89,7 +89,7 @@ public class FieldLayout extends GridLayout {
             int randomColorRes = colorsPool.get(random.nextInt(colorsPool.size()));
             int resolvedColor = ResourcesCompat.getColor(getResources(), randomColorRes, getContext().getTheme());
             iv.setColorFilter(resolvedColor);
-            iv.setTag(shapeRes);
+            iv.setTag(new Addon(shapeRes, randomColorRes));
         }
     }
 
@@ -106,7 +106,7 @@ public class FieldLayout extends GridLayout {
                 case MotionEvent.ACTION_DOWN: {
                     // disqualify user when press on bg
                     if (mListener != null && mRespondToTouch)
-                        mListener.onShapeDownTouch(-1);
+                        mListener.onShapeDownTouch(-1, -1);
                     return true;
                 }
                 case MotionEvent.ACTION_UP:
@@ -198,8 +198,9 @@ public class FieldLayout extends GridLayout {
                     // disqualify user when press on bg
                     if (mListener != null && mRespondToTouch) {
                         Object tag = imageView.getTag();
-                        int shapeRes = tag != null ? (int) tag : -1;
-                        mListener.onShapeDownTouch(shapeRes);
+                        Addon addon = (tag instanceof Addon) ? (Addon)tag : null;
+                        if (addon != null)
+                            mListener.onShapeDownTouch(addon.shapeRes, addon.colorRes);
                         cleanImage(imageView);
                     }
                     return true;
@@ -232,7 +233,17 @@ public class FieldLayout extends GridLayout {
         return randomShapes;
     }
 
+    private static class Addon {
+        @ColorRes int colorRes;
+        @DrawableRes int shapeRes;
+
+        public Addon(int shapeRes, int colorRes) {
+            this.colorRes = colorRes;
+            this.shapeRes = shapeRes;
+        }
+    }
+
     public interface Listener {
-        void onShapeDownTouch(@DrawableRes int shapeRes);
+        void onShapeDownTouch(@DrawableRes int shapeRes, @ColorRes int colorRes);
     }
 }

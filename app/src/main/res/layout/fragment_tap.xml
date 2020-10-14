@@ -8,6 +8,13 @@
     android:layout_height="match_parent"
     android:background="@drawable/tapet">
 
+    <View
+        android:id="@+id/blackMask"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:background="@color/black_800_a75"/>
+
     <TextView
         android:id="@+id/colorsTextView"
         android:layout_width="wrap_content"
