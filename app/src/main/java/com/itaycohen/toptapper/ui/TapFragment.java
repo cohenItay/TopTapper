@@ -11,17 +11,17 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.itaycohen.toptapper.AppDatabase;
 import com.itaycohen.toptapper.R;
+import com.itaycohen.toptapper.db.AppDatabase;
+import com.itaycohen.toptapper.db.dao.RecordsDao;
 import com.itaycohen.toptapper.models.UserModel;
-import com.itaycohen.toptapper.repos.RecordsDao;
 import com.itaycohen.toptapper.repos.UserRepository;
 import com.itaycohen.toptapper.ui.models.Level;
 import com.itaycohen.toptapper.ui.utils.DistinctColorSpan;
 import com.itaycohen.toptapper.ui.utils.Utils;
-import com.itaycohen.toptapper.ui.views.PlateView;
 import com.itaycohen.toptapper.ui.views.CountingView;
 import com.itaycohen.toptapper.ui.views.FieldLayout;
+import com.itaycohen.toptapper.ui.views.PlateView;
 
 import java.util.Collection;
 import java.util.List;
@@ -66,7 +66,7 @@ public class TapFragment extends Fragment {
     private @ColorRes List<Integer> colorsPool;
     private boolean isCurrentStateColor = false;
     private RecordsDao mRecordDao;
-    private int mBestRecord = -1;
+    private int mPersonalBestRecord = 0;
     private CompositeDisposable mDisposable = new CompositeDisposable();
 
 
@@ -85,6 +85,7 @@ public class TapFragment extends Fragment {
         mColorsTextView = view.findViewById(R.id.colorsTextView);
         mBlackMask = view.findViewById(R.id.blackMask);
         mTimeProgress = view.findViewById(R.id.timeProgress);
+        mProgressGroup = view.findViewById(R.id.progressGroup);
         setup();
         mCountingView.setListener(mCountingViewListener);
         mRecordDao = AppDatabase.getInstance().recordsDao();
@@ -92,15 +93,17 @@ public class TapFragment extends Fragment {
     }
 
     private void fetchBest() {
-        Disposable disposable = mRecordDao.getBestRecordForLevel(level)
+        UserModel userModel = UserRepository.getInstance().getUserModel();
+        Disposable disposable = mRecordDao.getBestRecordForBeginner2(userModel.id)//getBestRecordForLevel(level, userModel.id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         bestRecord -> {
-                            mBestRecord = bestRecord;
-                            mTimeProgress.setMax(mBestRecord);
-                        },
-                        throwable -> mProgressGroup.setVisibility(View.GONE));
+                            mProgressGroup.setVisibility(View.VISIBLE);
+                            /*mPersonalBestRecord = bestRecord;
+                            mTimeProgress.setMax(mPersonalBestRecord);*/
+                        }
+                );
         mDisposable.add(disposable);
     }
 
@@ -201,12 +204,10 @@ public class TapFragment extends Fragment {
             showEndSessionDialog();
         } else {
             clickCount++;
-            if (mBestRecord != -1) {
-                mTimeProgress.incrementProgressBy(1);
-                if (mTimeProgress.getProgress() == mTimeProgress.getMax()) {
-                    mShouldPersistRecord = true;
-                    animateNewBestRecord();
-                }
+            mTimeProgress.incrementProgressBy(1);
+            if (clickCount > mPersonalBestRecord) {
+                mShouldPersistRecord = true;
+                animateNewBestRecord();
             }
         }
     };
@@ -258,12 +259,10 @@ public class TapFragment extends Fragment {
     }
 
     private void persistNewRecord() {
-        if (mBestRecord < 1)
-            return;
         UserModel userModel = UserRepository.getInstance().getUserModel();
         Disposable disposable = mRecordDao.updateRecordForLevel(userModel, level, clickCount)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(() -> Log.i("tag", "persistNewRecord: The new record has been saved"));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> Log.i("tag", "persistNewRecord: The new record has been saved"));
     }
 }

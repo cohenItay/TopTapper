@@ -3,7 +3,6 @@ package com.itaycohen.toptapper.models;
 import android.view.View;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -14,9 +13,8 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "users")
 public class UserModel {
 
-    @PrimaryKey
-    @NonNull
-    public String id;
+    @PrimaryKey(autoGenerate = true)
+    public int id;
 
     @ColumnInfo(name = "user_name")
     public String userName;
@@ -33,7 +31,6 @@ public class UserModel {
         if (avatarRes == View.NO_ID)
             throw new IllegalArgumentException("Must be a valid drawable resource");
 
-        this.id = UUID.randomUUID().toString();
         this.userName = userName;
         this.avatarRes = avatarRes;
     }

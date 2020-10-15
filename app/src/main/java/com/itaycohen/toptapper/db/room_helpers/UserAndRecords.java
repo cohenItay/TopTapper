@@ -1,4 +1,4 @@
-package com.itaycohen.toptapper.models.room_helpers;
+package com.itaycohen.toptapper.db.room_helpers;
 
 import com.itaycohen.toptapper.models.Records;
 import com.itaycohen.toptapper.models.UserModel;
@@ -13,6 +13,6 @@ public class UserAndRecords {
             parentColumn = "id",
             entityColumn = "user_id"
     )
-    public Records library;
+    public Records records;
 
 }

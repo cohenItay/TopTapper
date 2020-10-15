@@ -1,4 +1,4 @@
-package com.itaycohen.toptapper.models.room_helpers;
+package com.itaycohen.toptapper.db.room_helpers;
 
 import com.itaycohen.toptapper.ui.models.Level;
 

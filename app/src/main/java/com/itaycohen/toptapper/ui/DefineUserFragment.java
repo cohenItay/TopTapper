@@ -44,7 +44,7 @@ public class DefineUserFragment extends Fragment {
             if (mUserEt.getText() != null)
                 userBuilder.setUserName(mUserEt.getText().toString());
             if (isInputsValid()) {
-                UserRepository.getInstance().setUserModel(userBuilder.build());
+                UserRepository.getInstance().onNewUserSet(userBuilder.build());
                 Snackbar.make(btn, R.string.user_defined, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.continue_, v -> {
                             boolean continueToLevelsFrag = false;

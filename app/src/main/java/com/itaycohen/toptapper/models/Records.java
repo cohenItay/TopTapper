@@ -12,8 +12,7 @@ public class Records {
 
     @ColumnInfo(name = "user_id")
     @PrimaryKey
-    @NonNull
-    public String userId;
+    public int userId;
 
     @ColumnInfo(name = "beginner")
     public int beginnerModeRecord;
@@ -24,7 +23,7 @@ public class Records {
     @ColumnInfo(name = "expert")
     public int expertModeRecord;
 
-    public Records(String userId, int beginnerModeRecord, int intermediateModeRecord, int expertModeRecord) {
+    public Records(int userId, int beginnerModeRecord, int intermediateModeRecord, int expertModeRecord) {
         this.userId = userId;
         this.beginnerModeRecord = beginnerModeRecord;
         this.intermediateModeRecord = intermediateModeRecord;
