@@ -24,7 +24,7 @@ public class LevelFragment extends Fragment {
            proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.BASIC));
         });
         view.findViewById(R.id.avgBtn).setOnClickListener(v -> {
-           proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.INTERMIDATE));
+           proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.INTERMEDIATE));
         });
         view.findViewById(R.id.expertBtn).setOnClickListener(v -> {
            proceed(LevelFragmentDirections.actionLevelFragmentToTapFragment(Level.EXPERT));

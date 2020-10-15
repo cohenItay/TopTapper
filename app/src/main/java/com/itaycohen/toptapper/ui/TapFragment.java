@@ -5,11 +5,17 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.itaycohen.toptapper.AppDatabase;
 import com.itaycohen.toptapper.R;
+import com.itaycohen.toptapper.models.UserModel;
+import com.itaycohen.toptapper.repos.RecordsDao;
+import com.itaycohen.toptapper.repos.UserRepository;
 import com.itaycohen.toptapper.ui.models.Level;
 import com.itaycohen.toptapper.ui.utils.DistinctColorSpan;
 import com.itaycohen.toptapper.ui.utils.Utils;
@@ -27,16 +33,23 @@ import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.Group;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.navigation.Navigation;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class TapFragment extends Fragment {
 
     private CountingView mCountingView;
     private PlateView mPlateView;
     private FieldLayout mFieldLayout;
+    private Group mProgressGroup;
+    private ProgressBar mTimeProgress;
     private ConstraintLayout mRootLayout;
     private TextView mColorsTextView;
     private View mBlackMask;
@@ -48,9 +61,13 @@ public class TapFragment extends Fragment {
     private CountingViewListenerImpl mCountingViewListener = new CountingViewListenerImpl();
     private int clickCount = 0;
     private long period = 0;
+    private boolean mShouldPersistRecord;
     private Level level;
     private @ColorRes List<Integer> colorsPool;
     private boolean isCurrentStateColor = false;
+    private RecordsDao mRecordDao;
+    private int mBestRecord = -1;
+    private CompositeDisposable mDisposable = new CompositeDisposable();
 
 
     public TapFragment() {
@@ -67,8 +84,24 @@ public class TapFragment extends Fragment {
         mRootLayout = view.findViewById(R.id.rootLayout);
         mColorsTextView = view.findViewById(R.id.colorsTextView);
         mBlackMask = view.findViewById(R.id.blackMask);
+        mTimeProgress = view.findViewById(R.id.timeProgress);
         setup();
         mCountingView.setListener(mCountingViewListener);
+        mRecordDao = AppDatabase.getInstance().recordsDao();
+        fetchBest();
+    }
+
+    private void fetchBest() {
+        Disposable disposable = mRecordDao.getBestRecordForLevel(level)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        bestRecord -> {
+                            mBestRecord = bestRecord;
+                            mTimeProgress.setMax(mBestRecord);
+                        },
+                        throwable -> mProgressGroup.setVisibility(View.GONE));
+        mDisposable.add(disposable);
     }
 
     private void setup() {
@@ -90,7 +123,7 @@ public class TapFragment extends Fragment {
                 plateAmount = 3;
                 maxFieldItemsPerCycle = 4;
                 break;
-            case INTERMIDATE:
+            case INTERMEDIATE:
                 period = 1200L;
                 plateAmount = 4;
                 maxFieldItemsPerCycle = 5;
@@ -157,16 +190,30 @@ public class TapFragment extends Fragment {
         mFieldLayout.setColorsPool(isColorMode ? colorsPool : null);
     }
 
+
     private FieldLayout.Listener onFieldClick = (shapeRes, colorRes) -> {
         Collection<Integer> checkCollection = isCurrentStateColor ? mPlateColorsRes: mPlateShapesRes;
         if (!checkCollection.contains(isCurrentStateColor ? colorRes : shapeRes)) {
             timer.cancel();
             mFieldLayout.setRespondToTouch(false);
+            if (mShouldPersistRecord)
+                persistNewRecord();
             showEndSessionDialog();
         } else {
             clickCount++;
+            if (mBestRecord != -1) {
+                mTimeProgress.incrementProgressBy(1);
+                if (mTimeProgress.getProgress() == mTimeProgress.getMax()) {
+                    mShouldPersistRecord = true;
+                    animateNewBestRecord();
+                }
+            }
         }
     };
+
+    private void animateNewBestRecord() {
+
+    }
 
     private void showEndSessionDialog() {
         new MaterialAlertDialogBuilder(requireContext())
@@ -202,5 +249,21 @@ public class TapFragment extends Fragment {
     public void onPause() {
         super.onPause();
         timer.cancel();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mDisposable.clear();
+    }
+
+    private void persistNewRecord() {
+        if (mBestRecord < 1)
+            return;
+        UserModel userModel = UserRepository.getInstance().getUserModel();
+        Disposable disposable = mRecordDao.updateRecordForLevel(userModel, level, clickCount)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(() -> Log.i("tag", "persistNewRecord: The new record has been saved"));
     }
 }

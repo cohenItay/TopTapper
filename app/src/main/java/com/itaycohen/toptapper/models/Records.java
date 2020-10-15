@@ -2,41 +2,33 @@ package com.itaycohen.toptapper.models;
 
 import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
 @Entity(tableName = "records")
 public class Records {
 
     @ColumnInfo(name = "user_id")
-    private String userId;
+    @PrimaryKey
+    @NonNull
+    public String userId;
 
     @ColumnInfo(name = "beginner")
-    private int beginnerModeRecord;
+    public int beginnerModeRecord;
 
     @ColumnInfo(name = "intermediate")
-    private int intermediateModeRecord;
+    public int intermediateModeRecord;
 
     @ColumnInfo(name = "expert")
-    private int expertModeRecord;
+    public int expertModeRecord;
 
     public Records(String userId, int beginnerModeRecord, int intermediateModeRecord, int expertModeRecord) {
         this.userId = userId;
         this.beginnerModeRecord = beginnerModeRecord;
         this.intermediateModeRecord = intermediateModeRecord;
         this.expertModeRecord = expertModeRecord;
-    }
-
-    public int getBeginnerModeRecord() {
-        return beginnerModeRecord;
-    }
-
-    public int getIntermediateModeRecord() {
-        return intermediateModeRecord;
-    }
-
-    public int getExpertModeRecord() {
-        return expertModeRecord;
     }
 
     @Override

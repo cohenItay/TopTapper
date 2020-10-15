@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rootLayout"
@@ -8,39 +7,57 @@
     android:layout_height="match_parent"
     android:background="@drawable/tapet">
 
-    <View
-        android:id="@+id/blackMask"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        android:background="@color/black_800_a75"/>
+    <ProgressBar
+        android:id="@+id/timeProgress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:progressDrawable="@drawable/tap_progress_drawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/middleGuide"
+        tools:progress="50" />
 
     <TextView
         android:id="@+id/colorsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/colors"
-        android:visibility="invisible"
-        tools:visibility="visible"
         android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
         android:textStyle="bold"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/btnsBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.82" />
+        app:layout_constraintVertical_bias="0.82"
+        tools:visibility="visible" />
 
-    <com.itaycohen.toptapper.ui.views.PlateView
-        android:id="@+id/btnsBar"
+    <TextView
+        android:id="@+id/progressBarLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/defeat_best"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@id/timeProgress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/blackMask"
         android:layout_width="match_parent"
-        android:layout_height="106dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/tap_shapes_plate_background"
-        android:padding="5dp"
-        app:buttons_bar_colors="@array/distinct_colors"
-        app:layout_constraintBottom_toTopOf="@id/topGuide" />
+        android:layout_height="match_parent"
+        android:background="@color/black_800_a75"
+        android:visibility="invisible" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/progressGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:constraint_referenced_ids="timeProgress,progressBarLabel" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuide"
@@ -55,6 +72,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
+
+    <com.itaycohen.toptapper.ui.views.CountingView
+        android:id="@+id/countingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="gone" />
 
     <com.itaycohen.toptapper.ui.views.FieldLayout
         android:id="@+id/fieldLayout"
@@ -73,22 +96,15 @@
         app:layout_constraintTop_toBottomOf="@id/topGuide"
         app:shapes_pool_arr="@array/total_shapes" />
 
-    <ProgressBar
-        android:id="@+id/timeProgress"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:progressDrawable="@drawable/tap_progress_drawable"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/middleGuide"
-        tools:progress="50" />
-
-    <com.itaycohen.toptapper.ui.views.CountingView
-        android:id="@+id/countingView"
+    <com.itaycohen.toptapper.ui.views.PlateView
+        android:id="@+id/btnsBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="gone" />
+        android:layout_height="106dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/tap_shapes_plate_background"
+        android:padding="5dp"
+        app:buttons_bar_colors="@array/distinct_colors"
+        app:layout_constraintBottom_toTopOf="@id/topGuide" />
 </androidx.constraintlayout.widget.ConstraintLayout>

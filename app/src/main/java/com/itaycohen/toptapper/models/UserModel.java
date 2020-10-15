@@ -15,14 +15,15 @@ import androidx.room.PrimaryKey;
 public class UserModel {
 
     @PrimaryKey
-    private String id;
+    @NonNull
+    public String id;
 
     @ColumnInfo(name = "user_name")
-    private final String userName;
+    public String userName;
 
     @ColumnInfo(name = "avatar_res")
     @DrawableRes
-    private final int avatarRes;
+    public int avatarRes;
 
     public UserModel(
             @NonNull String userName,
