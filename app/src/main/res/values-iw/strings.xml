@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="choose_level">בחר רמה</string>
+    <string name="newb">מתחיל</string>
+    <string name="intermediate">מתקדם</string>
+    <string name="expert">מומחה</string>
+    <string name="play">שחק</string>
+    <string name="leaderboards">טבלת שיאים</string>
+    <string name="profile_image">תמונת פרופיל</string>
+    <string name="select_an_avatar">בחר אוואטר</string>
+    <string name="avatar">אוואטר לבחירה</string>
+    <string name="define_user">הגדרת משתמש</string>
+    <string name="name">שם</string>
+    <string name="password">סיסמה</string>
+    <string name="define">הגדר</string>
+    <string name="change_user">החלף משתמש</string>
+    <string name="enter_name">נא הכנס שם</string>
+    <string name="enter_password">נא הכנס ססמה</string>
+    <string name="user_defined">המשתמש הוגדר</string>
+    <string name="continue_">המשך</string>
+    <string name="sesion_end">אופס!\nברח לך בין האצבעות? לא נורא, תמיד אפשר לנסות שוב!</string>
+    <string name="disqualify">פסילה</string>
+    <string name="try_again">נסה שוב</string>
+    <string name="no">לא</string>
+    <string name="defeat_best">הבס את השיא:</string>
+    <string name="points">%d נקודות</string>
+</resources>

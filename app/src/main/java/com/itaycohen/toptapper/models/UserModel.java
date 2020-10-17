@@ -13,10 +13,9 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "users")
 public class UserModel {
 
-    @PrimaryKey(autoGenerate = true)
-    public int id;
-
+    @PrimaryKey
     @ColumnInfo(name = "user_name")
+    @NonNull
     public String userName;
 
     @ColumnInfo(name = "avatar_res")

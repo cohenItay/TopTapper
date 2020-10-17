@@ -41,5 +41,9 @@ public class EntranceFragment extends Fragment {
                     Navigation.findNavController(v).navigate(R.id.action_entranceFragment_to_defineUserFragment, b);
                 }
         );
+
+        view.findViewById(R.id.leaderboardBtn).setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(EntranceFragmentDirections.actionEntranceFragmentToLeaderBoardFragment());
+        });
     }
 }

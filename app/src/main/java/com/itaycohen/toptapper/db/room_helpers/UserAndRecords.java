@@ -10,8 +10,8 @@ public class UserAndRecords {
     @Embedded
     public UserModel userModel;
     @Relation(
-            parentColumn = "id",
-            entityColumn = "user_id"
+            parentColumn = "user_name",
+            entityColumn = "owner_name"
     )
     public Records records;
 

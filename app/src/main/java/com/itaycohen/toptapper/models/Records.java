@@ -1,5 +1,7 @@
 package com.itaycohen.toptapper.models;
 
+import com.itaycohen.toptapper.ui.models.Level;
+
 import java.util.Objects;
 
 import androidx.annotation.NonNull;
@@ -10,9 +12,10 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "records")
 public class Records {
 
-    @ColumnInfo(name = "user_id")
+    @ColumnInfo(name = "owner_name")
     @PrimaryKey
-    public int userId;
+    @NonNull
+    public String ownerName;
 
     @ColumnInfo(name = "beginner")
     public int beginnerModeRecord;
@@ -23,11 +26,18 @@ public class Records {
     @ColumnInfo(name = "expert")
     public int expertModeRecord;
 
-    public Records(int userId, int beginnerModeRecord, int intermediateModeRecord, int expertModeRecord) {
-        this.userId = userId;
-        this.beginnerModeRecord = beginnerModeRecord;
-        this.intermediateModeRecord = intermediateModeRecord;
-        this.expertModeRecord = expertModeRecord;
+    public Records(@NonNull String ownerName) {
+        Objects.requireNonNull(ownerName);
+        this.ownerName = ownerName;
+    }
+
+    public int getRecordForLevel(Level level) {
+        switch (level) {
+            case BASIC: return beginnerModeRecord;
+            case INTERMEDIATE: return intermediateModeRecord;
+            case EXPERT: return expertModeRecord;
+            default: return -1;
+        }
     }
 
     @Override

@@ -94,14 +94,14 @@ public class TapFragment extends Fragment {
 
     private void fetchBest() {
         UserModel userModel = UserRepository.getInstance().getUserModel();
-        Disposable disposable = mRecordDao.getBestRecordForBeginner2(userModel.id)//getBestRecordForLevel(level, userModel.id)
+        Disposable disposable = mRecordDao.getBestRecordForLevel(level, userModel.userName)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         bestRecord -> {
                             mProgressGroup.setVisibility(View.VISIBLE);
-                            /*mPersonalBestRecord = bestRecord;
-                            mTimeProgress.setMax(mPersonalBestRecord);*/
+                            mPersonalBestRecord = bestRecord;
+                            mTimeProgress.setMax(mPersonalBestRecord);
                         }
                 );
         mDisposable.add(disposable);
@@ -150,7 +150,7 @@ public class TapFragment extends Fragment {
         mPlateView.setShapesArr(mPlateShapesRes, mPlateColorsRes);
     }
 
-    private  class CountingViewListenerImpl implements CountingView.Listener {
+    private class CountingViewListenerImpl implements CountingView.Listener {
 
         @Override
         public void onCountingDone() {
@@ -227,6 +227,7 @@ public class TapFragment extends Fragment {
                     timer = new Timer();
                     mCountingView.setVisibility(View.VISIBLE);
                     mFieldLayout.cleanField();
+                    mTimeProgress.setProgress(0);
                     isCurrentStateColor = false;
                     onColorsModeChange(false);
                     setup();
@@ -253,16 +254,17 @@ public class TapFragment extends Fragment {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroy() {
+        super.onDestroy();
         mDisposable.clear();
     }
 
     private void persistNewRecord() {
         UserModel userModel = UserRepository.getInstance().getUserModel();
-        Disposable disposable = mRecordDao.updateRecordForLevel(userModel, level, clickCount)
+        Disposable disposable = mRecordDao.insertOrUpdateRecordForLevel(userModel, level, clickCount)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> Log.i("tag", "persistNewRecord: The new record has been saved"));
+        mDisposable.add(disposable);
     }
 }

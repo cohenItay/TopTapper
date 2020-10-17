@@ -1,29 +1,29 @@
 <resources>
-    <string name="app_name">TopTapper</string>
-    <string name="title_activity_splash">FullscreenActivity</string>
-    <string name="top_tapper">Top Tapper</string>
-    <string name="choose_level">בחר רמה</string>
-    <string name="newb">מתחיל</string>
-    <string name="average">מתקדם</string>
-    <string name="expert">מומחה</string>
-    <string name="play">שחק</string>
-    <string name="leaderboards">טבלת שיאים</string>
-    <string name="profile_image">תמונת פרופיל</string>
-    <string name="select_an_avatar">בחר אוואטר</string>
-    <string name="avatar">אוואטר לבחירה</string>
-    <string name="define_user">הגדרת משתמש</string>
-    <string name="name">שם</string>
-    <string name="password">סיסמה</string>
-    <string name="define">הגדר</string>
-    <string name="change_user">החלף משתמש</string>
-    <string name="enter_name">נא הכנס שם</string>
-    <string name="enter_password">נא הכנס ססמה</string>
-    <string name="user_defined">המשתמש הוגדר</string>
-    <string name="continue_">המשך</string>
-    <string name="sesion_end">אופס!\nברח לך בין האצבעות? לא נורא, תמיד אפשר לנסות שוב!</string>
-    <string name="disqualify">פסילה</string>
-    <string name="try_again">נסה שוב</string>
-    <string name="no">לא</string>
-    <string name="colors">COLORS</string>
-    <string name="defeat_best">הבס את השיא:</string>
+    <string name="app_name" translatable="false">TopTapper</string>
+    <string name="top_tapper" translatable="false">Top Tapper</string>
+    <string name="colors" translatable="false">COLORS</string>
+    <string name="choose_level">Choose level</string>
+    <string name="newb">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="expert">Expert</string>
+    <string name="play">Play</string>
+    <string name="leaderboards">Records table</string>
+    <string name="profile_image">Profile avatar</string>
+    <string name="select_an_avatar">Choose avatar</string>
+    <string name="avatar">Avatar pool</string>
+    <string name="define_user">User creation</string>
+    <string name="name">Name</string>
+    <string name="password">Password</string>
+    <string name="define">Define</string>
+    <string name="change_user">Change user</string>
+    <string name="enter_name">Please enter a name</string>
+    <string name="enter_password">Please enter  an password</string>
+    <string name="user_defined">The user created successfully</string>
+    <string name="continue_">Continue</string>
+    <string name="sesion_end">Oops!\nIt looks like something slip threw your fingers, you can always try again</string>
+    <string name="disqualify">Disqualified</string>
+    <string name="try_again">Try again</string>
+    <string name="no">No</string>
+    <string name="defeat_best">"Defeat personal best: "</string>
+    <string name="points">%d pts</string>
 </resources>
