@@ -1,5 +1,7 @@
 package com.itaycohen.toptapper.ui;
 
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -7,9 +9,11 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.jinatonic.confetti.CommonConfetti;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.itaycohen.toptapper.R;
 import com.itaycohen.toptapper.db.AppDatabase;
@@ -23,6 +27,7 @@ import com.itaycohen.toptapper.ui.views.CountingView;
 import com.itaycohen.toptapper.ui.views.FieldLayout;
 import com.itaycohen.toptapper.ui.views.PlateView;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Timer;
@@ -45,6 +50,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class TapFragment extends Fragment {
 
+    private static final int SUCCESS_CLICK = 1;
+    private static final int FAILURE_CLICK = 2;
+    private static final int BEST_RECORD = 3;
+
     private CountingView mCountingView;
     private PlateView mPlateView;
     private FieldLayout mFieldLayout;
@@ -58,6 +67,9 @@ public class TapFragment extends Fragment {
     private @DrawableRes List<Integer> mTotalShapesList;
     private @DrawableRes List<Integer> mPlateShapesRes;
     private @ColorRes List<Integer> mPlateColorsRes;
+    private MediaPlayer mp1;
+    private MediaPlayer mp2;
+    private MediaPlayer mp3;
     private CountingViewListenerImpl mCountingViewListener = new CountingViewListenerImpl();
     private int clickCount = 0;
     private long period = 0;
@@ -86,6 +98,9 @@ public class TapFragment extends Fragment {
         mBlackMask = view.findViewById(R.id.blackMask);
         mTimeProgress = view.findViewById(R.id.timeProgress);
         mProgressGroup = view.findViewById(R.id.progressGroup);
+        mp1 = MediaPlayer.create(getContext(), R.raw.juntos);
+        mp2 = MediaPlayer.create(getContext(), R.raw.drop);
+        mp3 = MediaPlayer.create(getContext(), R.raw.best_record);
         setup();
         mCountingView.setListener(mCountingViewListener);
         mRecordDao = AppDatabase.getInstance().recordsDao();
@@ -201,19 +216,31 @@ public class TapFragment extends Fragment {
             mFieldLayout.setRespondToTouch(false);
             if (mShouldPersistRecord)
                 persistNewRecord();
+            playSound(FAILURE_CLICK);
             showEndSessionDialog();
         } else {
             clickCount++;
             mTimeProgress.incrementProgressBy(1);
-            if (clickCount > mPersonalBestRecord) {
+            if (clickCount == mPersonalBestRecord+1) {
                 mShouldPersistRecord = true;
-                animateNewBestRecord();
+                if (mPersonalBestRecord != 0)
+                    animateNewBestRecord();
+                else
+                    playSound(SUCCESS_CLICK);
+            } else {
+                playSound(SUCCESS_CLICK);
             }
         }
     };
 
     private void animateNewBestRecord() {
-
+        playSound(BEST_RECORD);
+        CommonConfetti.rainingConfetti((ViewGroup) requireView(), new int[] {
+                Color.YELLOW,
+                Color.LTGRAY,
+                Color.BLUE,
+                Color.GREEN
+        }).oneShot();
     }
 
     private void showEndSessionDialog() {
@@ -241,6 +268,32 @@ public class TapFragment extends Fragment {
                 .show();
     }
 
+    private void playSound(int sound) {
+        MediaPlayer mp;
+        switch (sound) {
+            case SUCCESS_CLICK:
+                mp = mp1;
+                break;
+            case FAILURE_CLICK:
+                mp = mp2;
+                break;
+            case BEST_RECORD:
+                mp = mp3;
+                break;
+            default:
+                return;
+        }
+        if(mp.isPlaying()){
+            mp.stop();
+            try {
+                mp.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        mp.start();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -257,6 +310,10 @@ public class TapFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mDisposable.clear();
+        mp1.release();
+        mp2.release();
+        mp1 = null;
+        mp2 = null;
     }
 
     private void persistNewRecord() {

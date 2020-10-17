@@ -73,12 +73,6 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.85" />
 
-    <com.itaycohen.toptapper.ui.views.CountingView
-        android:id="@+id/countingView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:visibility="gone" />
-
     <com.itaycohen.toptapper.ui.views.FieldLayout
         android:id="@+id/fieldLayout"
         android:layout_width="match_parent"
@@ -107,4 +101,10 @@
         android:padding="5dp"
         app:buttons_bar_colors="@array/distinct_colors"
         app:layout_constraintBottom_toTopOf="@id/topGuide" />
+
+    <com.itaycohen.toptapper.ui.views.CountingView
+        android:id="@+id/countingView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>
